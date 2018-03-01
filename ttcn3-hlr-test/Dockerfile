@@ -27,9 +27,7 @@ RUN	ln -s /osmo-ttcn3-hacks/ttcn3-tcpdump-start.sh / && \
 	ln -s /osmo-ttcn3-hacks/ttcn3-tcpdump-stop.sh /
 
 COPY	HLR_Tests.cfg /data/HLR_Tests.cfg
+COPY	Makefile.within-docker-img /Makefile
 
-CMD	cd /data && \
-	/osmo-ttcn3-hacks/start-testsuite.sh /osmo-ttcn3-hacks/hlr/HLR_Tests; \
-	exit_code=$?; \
-	/osmo-ttcn3-hacks/log_merge.sh HLR_Tests --rm; \
-	exit $exit_code
+WORKDIR /
+CMD	make test

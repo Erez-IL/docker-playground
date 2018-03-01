@@ -24,9 +24,6 @@ RUN	ln -s /osmo-ttcn3-hacks/ttcn3-tcpdump-start.sh / && \
 	ln -s /osmo-ttcn3-hacks/ttcn3-tcpdump-stop.sh /
 
 COPY	MGCP_Test.cfg /data/MGCP_Test.cfg
+COPY	Makefile.within-docker-img /Makefile
 
-CMD	cd /data && \
-	/osmo-ttcn3-hacks/start-testsuite.sh /osmo-ttcn3-hacks/mgw/MGCP_Test; \
-	exit_code=$?; \
-	/osmo-ttcn3-hacks/log_merge.sh MGCP_Test --rm; \
-	exit $exit_code
+CMD	cd / && make test
