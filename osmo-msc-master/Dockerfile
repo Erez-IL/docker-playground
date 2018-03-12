@@ -75,6 +75,9 @@ RUN	cd osmo-msc && \
 	./configure --enable-smpp --enable-iu && \
 	make "-j$(nproc)" install
 
+RUN apt-get install -y --no-install-recommends \
+			gdb
+
 VOLUME	/data
 
 COPY	osmo-msc.cfg /data/osmo-msc.cfg
