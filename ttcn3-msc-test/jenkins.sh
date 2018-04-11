@@ -70,6 +70,7 @@ docker run	--rm \
 		--name ${BUILD_TAG}-ttcn3-msc-test \
 		$DOCKER_ARGS \
 		$REPO_USER/ttcn3-msc-test
+result="$?"
 
 echo Stopping containers
 docker container kill ${BUILD_TAG}-msc
@@ -78,3 +79,4 @@ docker container kill ${BUILD_TAG}-stp
 network_remove
 rm -rf $VOL_BASE_DIR/unix
 collect_logs
+exit $result
