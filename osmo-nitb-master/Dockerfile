@@ -13,6 +13,7 @@ RUN	apt-key add /tmp/Release.key && \
 
 # we need to add this to invalidate the cache once the repository is updated.
 # unfortunately Dockerfiles don't support a conditional ARG, so we need to add both DPKG + RPM
+# (dependency libcdk5 is for meas_vis, used by the meas_feed docker image)
 ADD	$OSMOCOM_REPO/Release /tmp/Release
 ADD	http://download.opensuse.org/repositories/network:/osmocom:/nightly/CentOS_8_Stream/repodata/repomd.xml /tmp/repomd.xml
 RUN	apt-get update && \
@@ -23,8 +24,9 @@ RUN	apt-get update && \
 		libosmo-netif-dev \
 		libosmo-sccp-dev \
 		libsmpp34-dev \
-		libgtp-dev && \
-	apt-get clean
+		libgtp-dev \
+		libcdk5-dev \
+	&& apt-get clean
 
 WORKDIR	/tmp
 
