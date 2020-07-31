@@ -24,6 +24,7 @@ RUN	apt-get update && \
 		gawk \
 		gcc \
 		gcc-arm-none-eabi \
+		gdb \
 		git \
 		git-buildpackage \
 		gnupg \
