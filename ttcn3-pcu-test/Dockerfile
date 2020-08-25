@@ -27,9 +27,6 @@ RUN	ln -s /osmo-ttcn3-hacks/ttcn3-tcpdump-start.sh / && \
 	ln -s /osmo-ttcn3-hacks/ttcn3-tcpdump-stop.sh /
 
 COPY	PCU_Tests.cfg /data/PCU_Tests.cfg
+COPY	Makefile.within-docker-img /Makefile
 
-CMD	cd /data && \
-	/osmo-ttcn3-hacks/start-testsuite.sh /osmo-ttcn3-hacks/pcu/PCU_Tests; \
-	exit_code=$?; \
-	/osmo-ttcn3-hacks/log_merge.sh PCU_Tests --rm; \
-	exit $exit_code
+CMD	cd / && make test
