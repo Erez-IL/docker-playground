@@ -7,6 +7,24 @@ docker_images_require \
 	"osmo-smlc-$IMAGE_SUFFIX" \
 	"ttcn3-smlc-test"
 
+ADD_TTCN_RUN_OPTS=""
+ADD_TTCN_RUN_CMD=""
+ADD_TTCN_VOLUMES=""
+ADD_SMLC_VOLUMES=""
+ADD_SMLC_ARGS=""
+
+if [ "x$1" = "x-h" ]; then
+	ADD_TTCN_RUN_OPTS="-ti"
+	ADD_TTCN_RUN_CMD="bash"
+	if [ -d "$2" ]; then
+		ADD_TTCN_VOLUMES="$ADD_TTCN_VOLUMES -v $2:/osmo-ttcn3-hacks"
+	fi
+	if [ -d "$3" ]; then
+		ADD_SMLC_RUN_CMD="sleep 9999999"
+		ADD_SMLC_VOLUMES="$ADD_SMLC_VOLUMES -v $3:/src"
+	fi
+fi
+
 mkdir $VOL_BASE_DIR/smlc-tester
 cp SMLC_Tests.cfg $VOL_BASE_DIR/smlc-tester/
 
@@ -34,9 +52,12 @@ docker run	--rm \
 		$(docker_network_params $SUBNET 20) \
 		--ulimit core=-1 \
 		-v $VOL_BASE_DIR/smlc:/data \
+		$ADD_SMLC_VOLUMES \
 		--name ${BUILD_TAG}-smlc -d \
 		$DOCKER_ARGS \
-		$REPO_USER/osmo-smlc-$IMAGE_SUFFIX
+		$ADD_SMLC_ARGS \
+		$REPO_USER/osmo-smlc-$IMAGE_SUFFIX \
+		$ADD_SMLC_RUN_CMD
 
 echo Starting container with SMLC testsuite
 docker run	--rm \
@@ -44,9 +65,12 @@ docker run	--rm \
 		--ulimit core=-1 \
 		-e "TTCN3_PCAP_PATH=/data" \
 		-v $VOL_BASE_DIR/smlc-tester:/data \
+		$ADD_TTCN_VOLUMES \
 		--name ${BUILD_TAG}-ttcn3-smlc-test \
+		$ADD_TTCN_RUN_OPTS \
 		$DOCKER_ARGS \
-		$REPO_USER/ttcn3-smlc-test
+		$REPO_USER/ttcn3-smlc-test \
+		$ADD_TTCN_RUN_CMD
 
 echo Stopping containers
 docker container kill ${BUILD_TAG}-smlc
