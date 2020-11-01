@@ -54,7 +54,7 @@ ADD	respawn.sh /usr/local/bin/respawn.sh
 
 WORKDIR	/tmp
 
-ARG	OSMO_BTS_BRANCH="master"
+ARG	OSMO_BTS_BRANCH="pmaier/testfacch"
 
 RUN	git clone git://git.osmocom.org/osmo-bts.git
 ADD	http://git.osmocom.org/osmo-bts/patch?h=$OSMO_BTS_BRANCH /tmp/commit-osmo-bts
